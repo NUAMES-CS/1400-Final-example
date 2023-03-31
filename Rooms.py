@@ -1,9 +1,9 @@
 from numpy import array
 #numpy.array() makes a matrix so I can do matrix math
-MOVEMENT = {"north":array([1,0,0]),
-			"south":array([-1,0,0]),
-			"east":array([0,1,0]),
-			"west":array([0,-1,0]),
+MOVEMENT = {"north":array([0,1,0]),
+			"south":array([0,-1,0]),
+			"east":array([1,0,0]),
+			"west":array([-1,0,0]),
 			"up":array([0,0,1]),
 			"down":array([0,0,-1])}
 class Room():
@@ -34,7 +34,7 @@ class Room():
 			pick = input("What item would you like to 'use'? ").lower()
 			if pick in player.inventory:
 				if pick in self.usable_items:
-					print(f"You use the {pick}.")
+					print(self.useable_items[pick])
 					player.inventory.remove(pick)
 					del self.usable_items[pick]
 					self.special(pick)
@@ -52,7 +52,7 @@ class Room():
 		if direction in MOVEMENT:
 			if direction in self.allowed_movements:
 				print(f"You move {direction}.")
-				player.move(direction)
+				player.position = direction
 			else:
 				print(f"You can't move {direction} from here.")
 		else:
@@ -72,6 +72,7 @@ r = Room()
 r.room_items.append('key')
 r.usable_items['stick'] = "You use the stick to move the mound of dirt."
 r.allowed_movements.append('east')
+#error if key picked up before stick used
 r.descriptions[(('key',),("stick",))] = "Entry: There's a mound of dirt."
 r.descriptions[(('key',),())] = "Entry: An uncovered key with scattered dirt around it and a used stick."
 r.descriptions[((),())] = "Entry: Scattered dirt and a used stick."

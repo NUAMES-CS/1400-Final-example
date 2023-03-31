@@ -14,14 +14,17 @@ class Player():
 	'''Player Object'''
 	def __init__(self):
 						#x, y, z
-		self.position = (0, 0, 0)
+		self.__position = (0, 0, 0)
 		self.inventory = []
 		self.name = input("What is your name? ").title()
 		print(f"{self.name} begins an epic quest...")
 
-	def move(self, move):
-		'''matrix math to set the player's new position'''
-		self.position = tuple(array(self.position)+MOVEMENT.get(move,array([0,0,0])))
+	@property
+	def position(self):
+		return tuple(self.__position)
+	@position.setter
+	def position(self, new):
+		self.__position += new
 
 def valid_input(prompt = "What would you like to do? "):
 	'''force the player to select a valid action'''
@@ -32,7 +35,7 @@ def valid_input(prompt = "What would you like to do? "):
 		response = input(prompt).lower()
 	return response
 
-def save(player):
+def save():
 	'''save the player object and rooms dictionary to a file'''
 	with open('game.dat','wb') as f:
 		pickle.dump(player,f)
@@ -63,7 +66,7 @@ def main(player):
 		if choice == "quit":
 			print("Thanks for playing!")
 		elif choice == "save":
-			save(player)
+			save()
 		elif choice == "load":
 			load()
 		elif choice == "get":
